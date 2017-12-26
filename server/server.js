@@ -35,29 +35,12 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 //For EJS
 app.set('views', './app/views');
 app.set('view engine', 'ejs'); // set up ejs for templating
-//For Handlebars
-// app.set('views', './app/views')
-// app.engine('hbs', exphbs({
-//     extname: '.hbs'
-// }));
-// app.set('view engine', '.hbs');
- 
- 
- 
-// app.get('/', function(req, res) {
- 
-//     res.send('Welcome to Passport with Sequelize');
- 
-// });
- 
+
 //Models
 var models = require("./app/models");
 // console.log(models);
  
 //Routes
-//handlebars version
-// var authRoute = require('./app/routes/auth.js')(app,passport);
-//ejs version
 var authRoute = require('./app/routes/routes.js')(app,passport);
  
  

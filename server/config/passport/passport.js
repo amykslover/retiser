@@ -77,9 +77,7 @@ module.exports = function(passport, user) {
                         {
                             email: email,
                             password: userPassword,
-                            firstname: req.body.firstname,
-                            lastname: req.body.lastname
- 
+                            username: req.body.username 
                         };
  
                     User.create(data).then(function(newUser, created) {
@@ -102,11 +100,10 @@ module.exports = function(passport, user) {
     ));
 
 
-        //LOCAL SIGNIN
+    //WORKING -- LOCAL SIGNIN
     passport.use('local-login', new LocalStrategy(
      
         {
-            // by default, local strategy uses username and password, we will override with email
             usernameField: 'email',
             passwordField: 'password',
             passReqToCallback: true // allows us to pass back the entire request to the callback
@@ -130,16 +127,11 @@ module.exports = function(passport, user) {
             }).then(function(user) {
                 if(!user) {
                     return done(null, false, req.flash('loginMessage', 'No user found.'));
-                    // return done(null, false, {
-                    //     message: 'Email does not exist'
-                    // });
                 }
      
                 if(!isValidPassword(user.password, password)) {
-                    return done(null, false, req.flash('loginMessage', 'No user found.'));
-                    // return done(null, false, {
-                    //     message: 'Incorrect password.'
-                    // });
+                    return done(null, false, req.flash('loginMessage', 'Incorrect password.'));
+
                 }
 
                 var userinfo = user.get();
@@ -180,31 +172,37 @@ module.exports = function(passport, user) {
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google
         process.nextTick(function() {
-
             // try to find the user based on their google id
-            User.findOne({ 'google.id' : profile.id }, function(err, user) {
-                if (err)
-                    return done(err);
+            User.findOne({ where: { 'google_id' : profile.id }})
+            .then(function(error, user) {
+                if (error)
+                    return done(error);
 
                 if (user) {
-
                     // if a user is found, log them in
                     return done(null, user);
-                } else {
-                    // if the user isnt in our database, create a new user
-                    var newUser          = new User();
+                } 
 
-                    // set all of the relevant information
-                    newUser.google.id    = profile.id;
-                    newUser.google.token = token;
-                    newUser.google.name  = profile.displayName;
-                    newUser.google.email = profile.emails[0].value; // pull the first email
+                else {
 
-                    // save the user
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-                        return done(null, newUser);
+                    var data =
+ 
+                        {
+                            google_id: profile.id,
+                            google_token: token,
+                            email: profile.emails[0].value,
+                            username: profile.displayName 
+                        };
+                    
+                    User.create(data).then(function(newUser, created) {
+ 
+                        if (!newUser) {
+                            return done(null, false);
+                        }
+                        if (newUser) {
+                            return done(null, newUser);
+                        }
+ 
                     });
                 }
             });
