@@ -7,11 +7,7 @@ module.exports = function(sequelize, DataTypes) {
             primaryKey: true,
             type: DataTypes.INTEGER
         },
-        firstname: {
-            type: DataTypes.STRING,
-            notEmpty: true
-        },
-        lastname: {
+        username: {
             type: DataTypes.STRING,
             notEmpty: true
         },
@@ -21,9 +17,14 @@ module.exports = function(sequelize, DataTypes) {
                 isEmail: true
             }
         },
+        google_id: {
+            type: DataTypes.STRING
+        },
+        google_token: {
+            type: DataTypes.STRING
+        },        
         password: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.STRING
         },
         last_login: {
             type: DataTypes.DATE,
