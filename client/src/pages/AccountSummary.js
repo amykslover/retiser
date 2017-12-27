@@ -1,9 +1,9 @@
 import React from "react";
-
+import Navbar from "../components/Navbar";
 
 const AccountSummary = () =>
   <div>
-    <h1>AccountSummary</h1>
+  	<Navbar />
   </div>;
 
 export default AccountSummary;

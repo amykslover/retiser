@@ -20,6 +20,17 @@ app.use(bodyParser.json());
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 
+// Enable CORS so that browsers don't block requests.
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  next();
+});
+// Serve files created by create-react-app.
+app.use(express.static("client/build"));
+
+
 // For Passport
 app.use(session({
     secret: 'keyboard cat',
@@ -47,6 +58,14 @@ var authRoute = require('./app/routes/routes.js')(app,passport);
 //load passport strategies
 require('./config/passport/passport.js')(passport, models.User);
  
+// Any non API GET routes will be directed to our React App and handled by React Router
+app.get("*", function(req, res) {
+  if ( process.env.NODE_ENV === 'production' ) {
+    res.sendFile(__dirname + "/client/build/index.html");
+  } else {
+    res.sendFile(__dirname + "/client/public/index.html");
+  }
+});
  
 
  // Syncing sequelize models and then start the express app

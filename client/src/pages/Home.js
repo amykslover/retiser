@@ -9,7 +9,7 @@ const Home = () =>
       <h2>Letting you know when you need to up your savings game.</h2>
     </Hero>
         <Button
-        href="/signup"
+        href="/api/signup"
         type="primary"
         user="user"
         text="New Account"
@@ -17,7 +17,7 @@ const Home = () =>
         New Account
         </Button>
         <Button
-        href="/login"
+        href="/api/login"
         type="default"
         user="user"
         text="Account Login"
@@ -25,7 +25,7 @@ const Home = () =>
         Sign In
         </Button>
     	<Button
-        href="/auth/google"
+        href="/api/auth/google"
         type="danger"
         user="google-plus"
         text="Use Google"

@@ -4,6 +4,7 @@
   background-size: cover;
   background-position: center;
   position: relative;
+  border-bottom: solid black 6px;
 }
 
 .hero::after {
