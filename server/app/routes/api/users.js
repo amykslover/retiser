@@ -1,15 +1,15 @@
 //function is called in server.js and app & passport are passed in
 //require('./app/routes/routes.js')(app, passport);
 const router = require("express").Router();
-const db = require("../../app/models");
+const db = require("../../models");
 
-module.exports = function(app, passport) {
+// module.exports = function(app, passport) {
     //This should take data fromt the axios helper and create a user in the db
-    
+
     router.post("/login", function(req, res) {
         console.log(`Create for body: ${JSON.stringify(req.body)}`);
         db.User
-          .findOrCreate({ where: {email: req.body.email}, 
+          .findOrCreate({ where: {email: req.body.email},
                             defaults: {firstName: req.body.firstName, lastName: req.body.lastName} })
           .spread((user, created) => {
                 console.log(user.get({plain: true}));
@@ -32,7 +32,7 @@ module.exports = function(app, passport) {
     //     res.send('login hit')
 
     //     // render the page and pass in any flash data if it exists
-    //     // res.render('login.ejs', { message: req.flash('loginMessage') }); 
+    //     // res.render('login.ejs', { message: req.flash('loginMessage') });
     // });
 
 
@@ -45,20 +45,20 @@ module.exports = function(app, passport) {
         // res.render('signup.ejs', { message: req.flash('signupMessage') });
     });
 
-    router.post('/signup', passport.authenticate('local-signup', {
-        // res.send('signup hit')
-        // successRedirect : '/profile', // redirect to the secure profile section
-        // failureRedirect : '/signup', // redirect back to the signup page if there is an error
-        // failureFlash : true // allow flash messages
-    }));
+    // router.post('/signup', passport.authenticate('local-signup', {
+    //     // res.send('signup hit')
+    //     // successRedirect : '/profile', // redirect to the secure profile section
+    //     // failureRedirect : '/signup', // redirect back to the signup page if there is an error
+    //     // failureFlash : true // allow flash messages
+    // }));
 
     // process the login form
-    router.post('/login', passport.authenticate('local-login', {
-        // res.send('login hit')    
-        // successRedirect : '/profile', // redirect to the secure profile section
-        // failureRedirect : '/login', // redirect back to the signup page if there is an error
-        // failureFlash : true // allow flash messages
-    }));
+    // router.post('/login', passport.authenticate('local-login', {
+    //     // res.send('login hit')
+    //     // successRedirect : '/profile', // redirect to the secure profile section
+    //     // failureRedirect : '/login', // redirect back to the signup page if there is an error
+    //     // failureFlash : true // allow flash messages
+    // }));
 
     // =====================================
     // PROFILE SECTION =====================
@@ -86,25 +86,27 @@ module.exports = function(app, passport) {
     // send to google to do the authentication
     // profile gets us their basic information including their name
     // email gets their emails
-    router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+    // router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
 
     // the callback after google has authenticated the user
-    router.get('/auth/google/callback',
-            passport.authenticate('google', {
-                    successRedirect : '/profile',
-                    failureRedirect : '/'
-            }));
+    // router.get('/auth/google/callback',
+    //         passport.authenticate('google', {
+    //                 successRedirect : '/profile',
+    //                 failureRedirect : '/'
+    //         }));
 
 
-};
+// };
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
 
-    // if user is authenticated in the session, carry on 
+    // if user is authenticated in the session, carry on
     if (req.isAuthenticated())
         return next();
 
     // if they aren't redirect them to the home page
     res.redirect('/');
 }
+
+module.exports = router;
