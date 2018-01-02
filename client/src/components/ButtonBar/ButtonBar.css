@@ -1,4 +1,4 @@
 .buttonBar {
+	display: flex;
 	background-color: grey;
-	height: 60px;
 }

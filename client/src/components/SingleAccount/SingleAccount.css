@@ -1,0 +1,19 @@
+.fa {
+	font-size: 150%;
+}
+
+.panelsummary {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
+h2 {
+	font-size: 80%;
+	margin: 0;
+}
+
+p {
+	font-size: 90%;
+	margin: 0;
+}

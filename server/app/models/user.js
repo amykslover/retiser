@@ -19,10 +19,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         google_id: {
             type: DataTypes.STRING
-        },
-        google_token: {
-            type: DataTypes.STRING
-        },        
+        },      
         password: {
             type: DataTypes.STRING
         },
