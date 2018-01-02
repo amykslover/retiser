@@ -1,24 +1,24 @@
 //load bcrypt
 var bCrypt = require('bcrypt-nodejs');
- 
+
 var LocalStrategy    = require('passport-local').Strategy;
 var GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
 
 var configAuth = require('../auth');
 
 module.exports = function(passport, user) {
- 
+
     var User = user;
     // var LocalStrategy = require('passport-local').Strategy;
- 
+
         //serialize
-    passport.serializeUser(function(user, done) { 
+    passport.serializeUser(function(user, done) {
         done(null, user.id);
     });
 
 
 
-    // deserialize user 
+    // deserialize user
     passport.deserializeUser(function(id, done) {
         User.findById(id).then(function(user) {
             if (user) {
@@ -26,9 +26,9 @@ module.exports = function(passport, user) {
             } else {
                 done(user.errors, null);
             }
-     
+
         });
-     
+
     });
 
     // =========================================================================
@@ -37,23 +37,23 @@ module.exports = function(passport, user) {
 
     //WORKING -- Add a new local strategy for sign-up
     passport.use('local-signup', new LocalStrategy(
- 
+
         {
             usernameField: 'email',
             passwordField: 'password',
             passReqToCallback: true // allows us to pass back the entire request to the callback
- 
+
         },
- 
- 
+
+
         function(req, email, password, done) {
             var generateHash = function(password) {
                 return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
- 
-            };
- 
 
-            //Using the Sequelize user model we initialized earlier as User, 
+            };
+
+
+            //Using the Sequelize user model we initialized earlier as User,
             //we check to see if the user already exists, and if not we add them.
             User.findOne({
                 where: {
@@ -65,59 +65,59 @@ module.exports = function(passport, user) {
                     return done(null, false, {
                         message: 'That email is already taken'
                     });
- 
+
                 } else
- 
+
                 {
- 
+
                     var userPassword = generateHash(password);
- 
+
                     var data =
- 
+
                         {
                             email: email,
                             password: userPassword,
-                            username: req.body.username 
+                            username: req.body.username
                         };
- 
+
                     User.create(data).then(function(newUser, created) {
- 
+
                         if (!newUser) {
                             return done(null, false);
                         }
                         if (newUser) {
                             return done(null, newUser);
                         }
- 
+
                     });
- 
+
                 }
- 
+
             });
- 
+
         }
- 
+
     ));
 
 
     //WORKING -- LOCAL SIGNIN
     passport.use('local-login', new LocalStrategy(
-     
+
         {
             usernameField: 'email',
             passwordField: 'password',
             passReqToCallback: true // allows us to pass back the entire request to the callback
-     
+
         },
-     
-     
+
+
         function(req, email, password, done) {
-     
+
             var User = user;
             var isValidPassword = function(userpass, password) {
-     
+
                 return bCrypt.compareSync(password, userpass);
-     
+
             }
 
             User.findOne({
@@ -128,7 +128,7 @@ module.exports = function(passport, user) {
                 if(!user) {
                     return done(null, false, req.flash('loginMessage', 'No user found.'));
                 }
-     
+
                 if(!isValidPassword(user.password, password)) {
                     return done(null, false, req.flash('loginMessage', 'Incorrect password.'));
 
@@ -139,21 +139,21 @@ module.exports = function(passport, user) {
                 return done(null, userinfo);
                 console.log("userinfo")
                 console.log(userinfo)
-     
-     
+
+
             }).catch(function(err) {
-     
+
                 console.log("Error:", err);
-     
+
                 return done(null, false, {
                     message: 'Something went wrong with your Signin'
                 });
-     
+
             });
-     
-     
+
+
         }
-     
+
     ));
 
     // =========================================================================
@@ -183,33 +183,33 @@ module.exports = function(passport, user) {
                 if (user) {
                     // if a user is found, log them in
                     return done(null, user);
-                } 
+                }
 
                 else {
 
                     var data =
- 
+
                         {
                             google_id: profile.id,
                             google_token: token,
                             email: profile.emails[0].value,
-                            username: profile.displayName 
+                            username: profile.displayName
                         };
-                    
+
                     User.create(data).then(function(newUser, created) {
- 
+
                         if (!newUser) {
                             return done(null, false);
                         }
                         if (newUser) {
                             return done(null, newUser);
                         }
- 
+
                     });
                 }
             });
         });
 
     }));
- 
+
 }
