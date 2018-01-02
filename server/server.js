@@ -10,6 +10,7 @@ var exphbs       = require('express-handlebars')
 var port         = process.env.PORT || 8080;
 var morgan       = require('morgan');
 var flash        = require('connect-flash');
+var path         = require('path')
 
 //For BodyParser
 app.use(bodyParser.urlencoded({
@@ -28,7 +29,8 @@ app.use((req, res, next) => {
   next();
 });
 // Serve files created by create-react-app.
-app.use(express.static("client/build"));
+app.use(express.static(path.resolve(__dirname, '..', 'build')));
+
 
 
 // For Passport
@@ -49,15 +51,15 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 
 //Models
 var models = require("./app/models");
-// console.log(models);
+
  
 //Routes
-var authRoute = require('./app/routes/routes.js')(app,passport);
+var authRoute = require('./app/routes/api/users.js')(app,passport);
  
  
 //load passport strategies
 require('./config/passport/passport.js')(passport, models.User);
- 
+
 // Any non API GET routes will be directed to our React App and handled by React Router
 app.get("*", function(req, res) {
   if ( process.env.NODE_ENV === 'production' ) {

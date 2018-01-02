@@ -12,24 +12,63 @@ import axios from "axios";
 // Helper Functions
 const helpers = {
 
-  // This will return any saved articles from our database
-  signIn: function() {
-    return axios.get("/")
+  signUp: function() {
+    return axios.get("/api/signup")
       .then(function(results) {
 
         console.log("axios results", results);
         return results;
       });
   },
-  // This will save new articles to our database
-  signUp: function() {
-  	return axios.get("/login")
+
+  signIn: function() {
+  	return axios.get("/api/login")
 
   },
-  // This will remove saved articles from our database
+  
   google: function() {
-  	return axios.get("/auth/google")
+  	return axios.get("/api/auth/google")
 
+  },
+
+  saveUser: function(userData) {
+    console.log(userData)
+    return axios.post("/api/users/login", userData)
+    .then(function(results) {
+        console.log("axios results", results);
+        return results;
+      });
+  },
+
+  getAccounts: function(userId) {
+    return axios.get("/api/accounts/" + userId)
+      .then(function(results) {
+        console.log("axios results", results);
+        return results;
+      })
+  },
+  createAccount: function(accountId) {
+    return axios.get("/api/account/" + accountId)
+      .then(function(results) {
+        console.log("axios results", results);
+        return results;
+      })
+  },
+  //This request will overwrite the data in the existing account
+  deleteAccount: function(accountId) {
+    return axios.delete("/api/account/" + accountId)
+      .then(function(results) {
+        console.log("axios results", results);
+        return results;
+      })
+  },
+  //This request will overwrite the data in the existing account
+  replaceAccount: function(accountId) {
+    return axios.post("/api/account/" + accountId)
+      .then(function(results) {
+        console.log("axios results", results);
+        return results;
+      })
   }
 };
 
