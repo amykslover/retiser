@@ -18,14 +18,20 @@ class LoginGoogle extends Component {
 
 
   getOrCreateUser = user => {
-    // Create User only if the entry doesn't already exist.
+
     helpers.saveUser(user).then(response => {
-          console.log(`User Created or Logged In: ${JSON.stringify(response.data)}`);
-          sessionStorage.setItem('userId', response.data.id)
-          this.setState({userId: response.data.id, isLoggedIn: true, name: response.data.firstname})
-          console.log(this.state)
-          window.location.href=`/${response.data.id}`
-        });
+      
+      sessionStorage.setItem('userId', response.data.id)
+
+      this.setState({
+        userId: response.data.id, 
+        isLoggedIn: true, 
+        name: response.data.firstname
+      })
+
+      window.location.href=`/${response.data.id}`
+
+    });
   }
 
   responseGoogle = googleUser => {

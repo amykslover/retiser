@@ -13,7 +13,7 @@ import axios from "axios";
 const helpers = {
 
   saveUser: function(userData) {
-    console.log(userData)
+
     return axios.post("/api/users/login", userData)
     .then(function(results) {
         console.log("axios results", results);
@@ -22,15 +22,25 @@ const helpers = {
   },
 
   getAccounts: function(userId) {
-    console.log(userId);
+
     return axios.get("/api/users/" + userId)
       .then(function(results) {
         console.log("axios results", results);
         return results;
       })
   },
+
+  getAccount: function(accountId) {
+    return axios.get(`/api/account/${accountId}`)
+
+      .then(function(results) {
+        console.log("axios results", results);
+        return results;
+      })
+  },
+
   getTransactions: function(userId, accountId) {
-    console.log('Are we here?' + accountId);
+
     return axios.get(`/api/users/${userId}/account/${accountId}`)
 
       .then(function(results) {
@@ -40,16 +50,28 @@ const helpers = {
   },
   //This request will overwrite the data in the existing account
   deleteAccount: function(accountId) {
+
     return axios.delete("/api/users/account/" + accountId)
       .then(function(results) {
         console.log("axios results", results);
         return results;
       })
   },
-  //This request will overwrite the data in the existing account
-  addAccount: function(accountId) {
-    return axios.post("/api/users/account")
-      .then(function(results) {
+
+  addAccount: function(userId, accountNumber, accountType, accountInstitution, accountTransactions) {
+
+    // return axios.post(`/api/users/${userId}/account`)
+    return axios({
+      method: 'post',
+      url: `/api/users/${userId}/account`,
+      data: {
+        userId: userId,
+        accountNumber: accountNumber,
+        accountType: accountType,
+        accountInstitution: accountInstitution,
+        accountTransactions: accountTransactions
+      }
+    }).then(function(results) {
         console.log("axios results", results);
         return results;
       })

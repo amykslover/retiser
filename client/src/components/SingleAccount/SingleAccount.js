@@ -3,12 +3,21 @@ import { Panel } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import Amount from "../Amount"
 import "./SingleAccount.css";
+import helpers from '../../utils/helpers.js';
+
 
 class SingleAccount extends Component {
 
 	transactionFilter(transactions, timeperiod, category) {
-		console.log("================",timeperiod, category)
+		// console.log("================",timeperiod, category)
 		return transactions.filter(trans => trans.year === timeperiod && trans.category === category)
+	}
+
+
+	removeAccount = accountId => {
+		helpers.deleteAccount(accountId).then(response => {
+			console.log(response);
+		});
 	}
 
 	render() {
@@ -18,16 +27,18 @@ class SingleAccount extends Component {
 
 		const accountinfo = (
 			<div>
-			<i className="fa fa-cog pull-right"></i>
-			  <p>{account.type}  {account.number}</p>
-			  <h2>{account.institution}</h2>
+				<i className="fa fa-cog pull-right"></i>
+
+				<Link to={user + "/account/" + account.id}>
+				  <p>{account.type}  {account.number}</p>
+				  <h2>{account.institution}</h2>
+	  			</Link>
 			</div>
 		);
 
 
 		return (
 			<li>
-			<Link to={user + "/account/" + account.id}>
 				<Panel header={accountinfo}>
 
 				<div className="panelsummary">
@@ -54,7 +65,6 @@ class SingleAccount extends Component {
 				</div>
 
   				</Panel>
-  			</Link>
 			</li>
 		);
 

@@ -3,67 +3,72 @@ import "./AddAccount.css";
 import { Collapse, Well, Panel, Form, Col, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
 import ReactFileReader from 'react-file-reader';
 import helpers from '../../utils/helpers.js';
+import csv from 'csv';
+import Dropzone from 'react-dropzone';
+
+const csvjson = require('csvjson');
+const fs = require('fs');
+
 
 
 
 class AddAccount extends Component {
-  constructor(...args) {
-    super(...args);
 
-    this.state = {
-		userId: '',
-		accountNumber: '',
-		accountInstitution: '',
-		accountType: '',
-		accountTransactions: []
-    	
-    };
-  }
+	constructor(props) {
+		super(props);
 
-addNewAccount = (userId, accountData) => {
-
-	helpers.addAccount(userId, accountData).then(response => {
-		console.log(`Account Added: ${JSON.stringify(response.data)}`);
-	});
-}
-
-
-handleFiles = files => {
-	var reader = new FileReader();
-
-    reader.onload = function(e) {
-	    var contents = reader.result;
-	    console.log(contents);
-	    // csvTojs(contents)
-	    // this.setState({
-	    // 	accountTransactions: reader.result
-	    // })
+		this.state = {
+			disabled: true,
+			files: [],
+			userId: '',
+			accountNumber: '',
+			accountInstitution: '',
+			accountType: '',
+			accountTransactions: []
+		};
 	}
-	  reader.readAsText(files[0]);
-	  console.log(this.state)
-}
+
+	componentDidMount() {
+		var userId = sessionStorage.getItem('userId');
+		this.setState({
+			userId: userId
+		})
+	}
+
+	addNewAccount = (userId, accountNumber, accountType, accountInstitution) => {
+
+		helpers.addAccount(userId, accountNumber, accountType, accountInstitution).then(response => {
+			console.log(`Account Added: ${JSON.stringify(response.data)}`);
+		});
+	}
+
+	
 
 
-csvJSON = csv => {
 
-	var lines   = csv.split("\n");
-	var result  = [];
-	var headers = lines[0].split(",");
+	onDrop = (e) => {
 
-	for(var i=1; i<lines.length; i++){
-		var obj = {};
-		var currentline = lines[i].split(",");
+	    const reader = new FileReader();
 
-		for(var j=0;j<headers.length;j++){
-			obj[headers[j]] = currentline[j];
-		}
+	    reader.onload = () => {
 
-	result.push(obj);
-  }
-  //return result; //JavaScript object
-  console.log(JSON.stringify(result))
-  return JSON.stringify(result); //JSON
-}
+	        csv.parse(reader.result, (err, data) => {
+	            console.log(data);
+
+				this.setState({
+					fileInfo: e[0],
+					accountTransactions: data,
+				})
+
+				console.log(this.state);
+	        });
+	    };
+
+	    reader.readAsBinaryString(e[0]);
+
+	}
+
+
 	
 	render() {
 
@@ -90,8 +95,8 @@ csvJSON = csv => {
 		        	name="instution" 
 		        	placeholder="Financial Institution" 
 		        	value={this.state.value}
-		        	onChange={this.handleChange}
-		        ></FormControl>
+		        	onChange={event => this.setState({ accountInstitution: event.target.value })}
+		        />
 		      </Col>
 		    </FormGroup>
 
@@ -100,7 +105,14 @@ csvJSON = csv => {
 		        Number
 		      </Col>
 		      <Col sm={10}>
-		        <FormControl type="text" name="number" placeholder="Account Number" />
+		        <FormControl 
+		        type="text" 
+		        name="number" 
+		        placeholder="Account Number" 
+		        value={this.state.value}
+		        onChange={event => this.setState({ accountNumber: event.target.value })}
+		        />
+
 		      </Col>
 		    </FormGroup>
 
@@ -110,7 +122,9 @@ csvJSON = csv => {
 		      </Col>
 		      <Col sm={10}>
 
-		        <select name="accountType">
+		        <select 
+		        onChange={event => this.setState({ accountType: event.target.value })}
+		        name="accountType">
 		          <option value="none">Select Type</option>
 		          <option value="401k">401k</option>
 		          <option value="Roth401k">401k (Roth)</option>
@@ -118,15 +132,31 @@ csvJSON = csv => {
 		          <option value="RothIRA">IRA (Roth)</option>
 		          <option value="403b">403b</option>
 		        </select>
+
 		      </Col>
 		    </FormGroup>
 			
 		    <FormGroup>
 		      <Col smOffset={2} sm={10}>
-		      
-				<ReactFileReader fileTypes={[".csv"]} handleFiles={this.handleFiles}>
-				  <Button>Load Account</Button>
-				</ReactFileReader>
+				
+				<section>
+			        <aside>
+			          <button type="button" onClick={() => this.setState({ disabled: !this.state.disabled })}>Toggle disabled</button>
+			        </aside>
+			        <div className="dropzone">
+			          <Dropzone onDrop={this.onDrop.bind(this)} disabled={this.state.disabled}>
+			            <p>Try dropping some files here, or click to select files to upload.</p>
+			          </Dropzone>
+			        </div>
+			        <aside>
+			          <h2>Dropped files</h2>
+			          <ul>
+			            {
+			              this.state.files.map(f => <li>{f.name} - {f.size} bytes</li>)
+			            }
+			          </ul>
+			        </aside>
+			    </section>
 
 		      </Col>
 		    </FormGroup>
