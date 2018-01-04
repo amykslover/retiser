@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             notEmpty: true
         },
-        description: {
+        institution: {
             type: DataTypes.STRING,
             notEmpty: true
         },
@@ -28,11 +28,15 @@ module.exports = function(sequelize, DataTypes) {
 
     //Account belongs to a User and cannot be created without a User
     Account.associate = function(models) {
+        Account.hasMany(models.Transaction, {
+            onDelete: "cascade"
+        }),
         Account.belongsTo(models.User, {
             foreignKey: {
                 allowNull: false
             }
         })
     }
+
     return Account;
 }

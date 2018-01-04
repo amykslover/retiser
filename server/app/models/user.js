@@ -7,7 +7,11 @@ module.exports = function(sequelize, DataTypes) {
             primaryKey: true,
             type: DataTypes.INTEGER
         },
-        username: {
+        firstname: {
+            type: DataTypes.STRING,
+            notEmpty: true
+        },
+        lastname: {
             type: DataTypes.STRING,
             notEmpty: true
         },
@@ -19,9 +23,18 @@ module.exports = function(sequelize, DataTypes) {
         },
         google_id: {
             type: DataTypes.STRING
-        },      
+        }, 
+        facebook_id: {
+            type: DataTypes.STRING
+        },         
         password: {
             type: DataTypes.STRING
+        },
+        age: {
+           type: DataTypes.INTEGER 
+        },
+        agi: {
+           type: DataTypes.DECIMAL(10, 2)
         },
         last_login: {
             type: DataTypes.DATE,

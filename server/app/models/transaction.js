@@ -7,15 +7,28 @@ module.exports = function(sequelize, DataTypes) {
             primaryKey: true,
             type: DataTypes.INTEGER
         },
+        date: {
+            type: DataTypes.DATE,
+            notEmpty: true
+        },
+        month: {
+            type: DataTypes.INTEGER,
+            notEmpty: true
+        },
+        year: {
+            type: DataTypes.INTEGER,
+            notEmpty: true
+        },
         description: {
             type: DataTypes.STRING,
             notEmpty: true
         },
         amount: {
-            type: DataTypes.DECIMAL
+            type: DataTypes.DECIMAL(10, 2)
         },
         category: {
-            type: DataTypes.ENUM('employee_contibution', 'employer_contribution', 'fee', 'dividend')
+            type: DataTypes.STRING
+            // type: DataTypes.ENUM('employee_contibution', 'employer_contribution', 'fee', 'dividend')
         }
  
     });

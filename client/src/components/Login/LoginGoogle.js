@@ -1,19 +1,30 @@
-import React from 'react';
+import React, { Component } from "react";
 import { GoogleLogin } from 'react-google-login-component';
 import helpers from '../../utils/helpers.js';
 import "./Login.css";
+import { Link } from "react-router-dom";
+import { browserHistory } from "react-router";
 
-class LoginGoogle extends React.Component{
+class LoginGoogle extends Component {
   
   constructor (props, context) {
     super(props, context);
+    this.state= {
+      isLoggedIn: false,
+      name: '',
+      userId: ''
+    }
   }
+
 
   getOrCreateUser = user => {
     // Create User only if the entry doesn't already exist.
-    helpers.saveUser(user).then(res => {
-          console.log(`Created: ${JSON.stringify(res.data)}`);
-          this.props.onLoginChange(true, res.data.id);
+    helpers.saveUser(user).then(response => {
+          console.log(`User Created or Logged In: ${JSON.stringify(response.data)}`);
+          sessionStorage.setItem('userId', response.data.id)
+          this.setState({userId: response.data.id, isLoggedIn: true, name: response.data.firstname})
+          console.log(this.state)
+          window.location.href=`/${response.data.id}`
         });
   }
 
@@ -32,6 +43,7 @@ class LoginGoogle extends React.Component{
       // image: profile.getImageUrl()
     };
     this.getOrCreateUser(userObject);
+
   }
 
  
