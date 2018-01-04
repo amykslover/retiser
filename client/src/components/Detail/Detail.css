@@ -3,7 +3,16 @@
 	width: 90%;
 }
 
+.glyphicon {
+    font-size: 10px;
+}
+
 body {
     font-family: 'Roboto';
     font-size: 12px;
+}
+
+th {
+	font-weight: bold;
+	font-size: 110%;
 }

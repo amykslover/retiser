@@ -1,0 +1,10 @@
+.portfolioPanel {
+	width: 90%;
+	margin: 10px auto;
+}
+
+.portfolio {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}

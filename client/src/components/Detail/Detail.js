@@ -27,11 +27,11 @@ class Detail extends Component {
 
 	    return (
 	      <BootstrapTable className="detailtable" ref='table' data={ transactions } striped hover>
-	        <TableHeaderColumn width='70' dataField='id' isKey={ true} dataSort={ true } >ID</TableHeaderColumn>
-	        <TableHeaderColumn width='120' dataField='date' dataSort={ true } >Date</TableHeaderColumn>
+	        <TableHeaderColumn width='70' dataField='id' isKey={ true} dataSort={ true } dataAlign='center' >ID</TableHeaderColumn>
+	        <TableHeaderColumn width='120' dataField='date' type="date" dataSort={ true } >Date</TableHeaderColumn>
 	        <TableHeaderColumn dataField='description' dataSort={ true } >Description</TableHeaderColumn>
 	        <TableHeaderColumn dataField='category'dataSort={ true } >Category</TableHeaderColumn>
-	        <TableHeaderColumn width='120' dataField='amount' dataFormat={ priceFormatter } dataSort={ true } >Amount</TableHeaderColumn>
+	        <TableHeaderColumn width='120' dataField='amount' dataFormat={ priceFormatter } dataSort={ true } dataAlign='right'>Amount</TableHeaderColumn>
 	      </BootstrapTable>
 	    );
 

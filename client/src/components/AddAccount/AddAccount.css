@@ -1,4 +1,15 @@
-.emptypanel {
-	margin: 0 auto;
-	width: 80%;
+.addAccountCollapse {
+	margin: 0 auto 20px auto;
+	width: 90%;
+}
+
+.addAccountButton {
+	height: 40px;
+}
+.glyphicon {
+	font-size: 13px;
+}
+
+label {
+	font-size: 16px;
 }
