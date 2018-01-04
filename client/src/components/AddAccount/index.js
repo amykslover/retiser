@@ -1,1 +1,1 @@
-export { default } from "./EmptyPanel";
+export { default } from "./AddAccount";

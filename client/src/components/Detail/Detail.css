@@ -1,4 +1,9 @@
 .detailtable{
 	margin: 0 auto;
-	width: 80%;
+	width: 90%;
+}
+
+body {
+    font-family: 'Roboto';
+    font-size: 12px;
 }

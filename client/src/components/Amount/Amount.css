@@ -4,6 +4,7 @@ h1 {
 }
 
 #amountbox {
-	width: 20%;
-	min-width: 100px;
+	width: 15%;
+	min-width: 80px;
+	margin: 0 5px;
 }

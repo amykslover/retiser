@@ -10,13 +10,64 @@ const db = require("../../models");
         console.log(`Create for body: ${JSON.stringify(req.body)}`);
         db.User
           .findOrCreate({ where: {email: req.body.email},
-                            defaults: {firstName: req.body.firstName, lastName: req.body.lastName} })
+                            defaults: {
+                                firstname: req.body.firstName, 
+                                lastname: req.body.lastName, 
+                                google_id: req.body.google_id} 
+                            })
           .spread((user, created) => {
                 console.log(user.get({plain: true}));
                 console.log(created);
                 res.json(user);
           })
-          .catch(err => res.status(422).json(err));
+          .catch(error => res.status(422).json(error));
+    });
+    //This should retrieve all the data from the user that is logged in
+    router.get("/:id", function(req, res) {
+        const currentUser = req.params.id
+        console.log('Current User');
+        console.log(currentUser);
+
+
+        db.User.findOne({
+            where : 
+            { id : currentUser},
+            include: [
+            { 
+                model  : db.Account,
+            include: [
+            {
+              model  : db.Transaction
+            }
+          ]
+        }
+      ]
+    }).then(function(data) {
+          res.json(data);
+      });
+
+});
+
+    router.get("/:id/account/:accountid", function(req, res) {
+        console.log(`Create for body: ${JSON.stringify(req.body)}`);
+
+
+        console.log('Current Account');
+        const currentAccount = req.params.accountid
+        console.log(currentAccount);
+        
+        db.Transaction.findAll(
+        {
+            include: [ 
+                { 
+                    model: db.Account,
+                    where: { id: currentAccount }
+                }
+            ]
+        })
+        .then(function(transactions) {
+          res.json(transactions);
+        });
     });
     // ===================================================================
     // HOME PAGE (with login links) ======================================

@@ -79,8 +79,173 @@ models.sequelize.sync({ force: true }).then(function() {
      if (!error)
          console.log("Site is live on port: " + port);
      else console.log(error)
-
  });
+
+   models.User.bulkCreate([
+    {
+      firstname: "Thomas",
+      lastname: "Smith",
+      email: "thomas.smith@mail.com",
+      age: 60,
+      agi: 90000
+    },
+    {
+      firstname: "Nancy",
+      lastname: "Jones",
+      email: "n.jones@mail.com",
+      age: 29,
+      agi: 105000
+    },
+    {
+      firstname: "Amy",
+      lastname: "Slover",
+      email: "amykslover@gmail.com",
+      age: 35,
+      agi: 150000
+    }
+  ])
+
+  models.Account.bulkCreate([
+    {
+      number: "123456789",
+      institution: "Vanguard",
+      type: "401k",
+      UserId: "1"
+    },
+    {
+      number: "987654321",
+      institution: "Pensys",
+      type: "401k",
+      UserId: "1"
+    },
+    {
+      number: "777777777",
+      institution: "Fidelity",
+      type: "IRA",
+      UserId: "1"
+    },
+    {
+      number: "123456789",
+      institution: "Vanguard",
+      type: "401k",
+      UserId: "3"
+    },
+    {
+      number: "987654321",
+      institution: "Pensys",
+      type: "401k",
+      UserId: "3"
+    },
+    {
+      number: "77777777",
+      institution: "Fidelity",
+      type: "IRA",
+      UserId: "3"
+    }
+  ])
+
+
+  models.Transaction.bulkCreate([
+    {
+      date: "01/10/2017",
+      month: 1,
+      year: 2016,
+      description: "SAFE HARBOR MATCH",
+      amount: '1500.96',
+      category: "Employer Contribution",
+      AccountId: "5"
+    },
+    {
+      date: "01/13/2017",
+      month: 1,
+      year: 2017,
+      description: "SAFE HARBOR MATCH",
+      amount: 250.00,
+      category: "Employer Contribution",
+      AccountId: "5"
+    },
+    {
+      date: "01/13/2017",
+      month: 1,
+      year: 2017,
+      description: "PRE TAX CONTRIBUTION",
+      amount: 500.00,
+      category: "Contribution",
+      AccountId: "5"
+    },
+    {
+      date: "01/30/2017",
+      month: 1,
+      year: 2017,
+      description: "SAFE HARBOR MATCH",
+      amount: 310.00,
+      category: "Employer Contribution",
+      AccountId: "5"
+    },
+    {
+      date: "01/30/2017",
+      month: 1,
+      year: 2017,
+      description: "PRE TAX CONTRIBUTION",
+      amount: 620.00,
+      category: "Contribution",
+      AccountId: "5"
+    },
+    {
+      date: "02/01/2017",
+      month: 2,
+      year: 2017,
+      description: "DFA ONE-YEAR FIXED INCOME",
+      amount: 0.33,
+      category: "Dividend",
+      AccountId: "5"
+    },
+    {
+      date: "02/01/2017",
+      month: 2,
+      year: 2017,
+      description: "DFA ONE-YEAR FIXED INCOME",
+      amount: 0.47,
+      category: "Dividend",
+      AccountId: "5"
+    },
+    {
+      date: "02/15/2017",
+      month: 2,
+      year: 2017,
+      description: "SAFE HARBOR MATCH",
+      amount: 250.00,
+      category: "Employer Contribution",
+      AccountId: "5"
+    },
+    {
+      date: "02/15/2017",
+      month: 2,
+      year: 2017,
+      description: "PRE TAX CONTRIBUTION",
+      amount: 500.00,
+      category: "Contribution",
+      AccountId: "5"
+    },
+    {
+      date: "02/27/2017",
+      month: 2,
+      year: 2017,
+      description: "SAFE HARBOR MATCH",
+      amount: 250.00,
+      category: "Employer Contribution",
+      AccountId: "5"
+    },
+    {
+      date: "02/27/2017",
+      month: 2,
+      year: 2017,
+      description: "PRE TAX CONTRIBUTION",
+      amount: 500.00,
+      category: "Contribution",
+      AccountId: "5"
+    }
+  ])
 
 }).catch(function(error) {
 

@@ -6,20 +6,21 @@ import "./Accounts.css";
 class Accounts extends Component {
 
 	render() {
-		let accounts;
-		if(this.props.accounts) {
-			accounts = this.props.accounts.map(account => {
+		const user = this.props.user;
+		let userAccounts = this.props.accounts;
+
+		if(userAccounts) {
+			userAccounts = userAccounts.map(account => {
 				console.log(account);
 				return (
-					<SingleAccount key={account.number} account={account} />
+					<SingleAccount key={account.number} account={account} user={user}/>
 				);
 			});
 		}
-		console.log(this.props);
 		
 		return(
 			<ul>
-			{accounts}
+			{userAccounts}
 			</ul>
 
 			);
