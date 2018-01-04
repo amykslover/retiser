@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Navbar from "../components/Navbar";
 import Accounts from "../components/Accounts";
 import AddAccount from "../components/AddAccount";
+import Portfolio from "../components/Portfolio";
 import helpers from '../utils/helpers.js';
 
 class AccountSummary extends Component {
@@ -38,8 +39,14 @@ class AccountSummary extends Component {
 render() {
     return (
       <div>
-		<Navbar user={this.state.user} name={this.state.name} age={this.state.age}  agi={this.state.agi}/>
-		<AddAccount />
+		<Navbar/>
+		<Portfolio
+      user={this.state.user} 
+      name={this.state.name} 
+      age={this.state.age}  
+      agi={this.state.agi}
+    />
+    <AddAccount />
 		<Accounts user={this.state.user} accounts={this.state.accounts}/>
       </div>
     );

@@ -69,6 +69,50 @@ const db = require("../../models");
           res.json(transactions);
         });
     });
+
+
+    router.post("/:id/account", function(req, res) {
+        console.log(`Create for body: ${JSON.stringify(req.body)}`);
+        // const userID = {req.body.userId}
+        // const accountNumber = req.body.accountNumber;
+        // const accountType = req.body.accountType;
+        // const accountInstitution = req.body.accountInstitution;
+        // const transactionData = {req.body.transactions};
+
+        db.Account.create({
+            number: accountNumber,
+            institution: accountInstitution,
+            type: accountType,
+            UserId: userID
+        }).then(function(dbAccount) {
+            console.log(dbAccount);
+        })
+
+    });
+
+        // db.Account.create({
+        //     number: ,
+        //     institution: ,
+        //     type:  ,
+        //     UserId: 
+        // }).then(function(dbAccount) {
+          
+        //   console.log(dbAccount);
+
+        //   db.Transaction.bulkCreate({
+        //     date: ,
+        //     month: ,
+        //     year: ,
+        //     description: ,
+        //     amount: ,
+        //     category: ,
+        //     AccountId: dbAccount.dataValues.id,
+        //   }).then(function(result) {
+        //     response.json(result);
+        //   })
+        // });
+
+    // });
     // ===================================================================
     // HOME PAGE (with login links) ======================================
     // ===================================================================

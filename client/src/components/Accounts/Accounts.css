@@ -1,5 +1,7 @@
 ul {
-  list-style-type: none;
-  margin: 0 auto;
-  width: 90%;
+	list-style-type: none;
+	padding: 0;
+	font-weight: bold;
+	margin: 0 auto;
+	width: 90%;
 }

@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import "./AddAccount.css";
-import { Panel, Form, Col, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import { Collapse, Well, Panel, Form, Col, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
 import ReactFileReader from 'react-file-reader';
 import helpers from '../../utils/helpers.js';
 
-class AddAccount extends Component {
 
-state = {
-	userId: '',
-	accountNumber: '',
-	accountInstitution: '',
-	accountType: '',
-	accountTransactions: []
-};
+
+class AddAccount extends Component {
+  constructor(...args) {
+    super(...args);
+
+    this.state = {
+		userId: '',
+		accountNumber: '',
+		accountInstitution: '',
+		accountType: '',
+		accountTransactions: []
+    	
+    };
+  }
 
 addNewAccount = (userId, accountData) => {
 
@@ -20,7 +26,6 @@ addNewAccount = (userId, accountData) => {
 		console.log(`Account Added: ${JSON.stringify(response.data)}`);
 	});
 }
-
 
 
 handleFiles = files => {
@@ -63,28 +68,43 @@ csvJSON = csv => {
 	render() {
 
 	return(
-	  <Panel className="emptypanel">
+
+    <div className="addAccountCollapse">
+    <Button className="addAccountButton" onClick={() => this.setState({ open: !this.state.open })}>
+    <p><i className='glyphicon glyphicon-plus-sign'></i> New</p>
+    </Button>
+    <Collapse in={this.state.open}>
+    <div>
+    <Well>
+
+	  <Panel>
 
 		  <Form horizontal>
-		    <FormGroup controlId="formHorizontalEmail">
+		    <FormGroup controlId="formAccountInstitution">
 		      <Col componentClass={ControlLabel} sm={2}>
 		        Institution
 		      </Col>
 		      <Col sm={10}>
-		        <FormControl type="text" placeholder="Financial Institution" />
+		        <FormControl 
+		        	type="text" 
+		        	name="instution" 
+		        	placeholder="Financial Institution" 
+		        	value={this.state.value}
+		        	onChange={this.handleChange}
+		        ></FormControl>
 		      </Col>
 		    </FormGroup>
 
-		    <FormGroup controlId="formHorizontalPassword">
+		    <FormGroup controlId="formAccountNumber">
 		      <Col componentClass={ControlLabel} sm={2}>
 		        Number
 		      </Col>
 		      <Col sm={10}>
-		        <FormControl type="text" placeholder="Account Number" />
+		        <FormControl type="text" name="number" placeholder="Account Number" />
 		      </Col>
 		    </FormGroup>
 
-		    <FormGroup controlId="formHorizontalPassword">
+		    <FormGroup controlId="formAccountType">
 		      <Col componentClass={ControlLabel} sm={2}>
 		        Type
 		      </Col>
@@ -96,6 +116,7 @@ csvJSON = csv => {
 		          <option value="Roth401k">401k (Roth)</option>
 		          <option value="IRA">IRA</option>
 		          <option value="RothIRA">IRA (Roth)</option>
+		          <option value="403b">403b</option>
 		        </select>
 		      </Col>
 		    </FormGroup>
@@ -103,16 +124,18 @@ csvJSON = csv => {
 		    <FormGroup>
 		      <Col smOffset={2} sm={10}>
 		      
-				<ReactFileReader fileTypes={[".csv",".zip"]} handleFiles={this.handleFiles}>
-				  <button className='btn'>Load Account</button>
+				<ReactFileReader fileTypes={[".csv"]} handleFiles={this.handleFiles}>
+				  <Button>Load Account</Button>
 				</ReactFileReader>
-		        <Button type="submit">
-		          Add Account
-		        </Button>
+
 		      </Col>
 		    </FormGroup>
 		  </Form>
 	  </Panel>
+            </Well>
+          </div>
+        </Collapse>
+      </div>
 	);
 
 	}
