@@ -2,6 +2,8 @@
 //require('./app/routes/routes.js')(app, passport);
 const router = require("express").Router();
 const db = require("../../models");
+const csvjson = require('csvjson');
+const fs = require('fs');
 
 // module.exports = function(app, passport) {
     //This should take data fromt the axios helper and create a user in the db
@@ -48,13 +50,10 @@ const db = require("../../models");
 
 });
 
+    //Get transasctions for a user account
     router.get("/:id/account/:accountid", function(req, res) {
-        console.log(`Create for body: ${JSON.stringify(req.body)}`);
 
-
-        console.log('Current Account');
         const currentAccount = req.params.accountid
-        console.log(currentAccount);
         
         db.Transaction.findAll(
         {
@@ -70,15 +69,31 @@ const db = require("../../models");
         });
     });
 
-
+    //Create a new account for a user
     router.post("/:id/account", function(req, res) {
-        console.log(`Create for body: ${JSON.stringify(req.body)}`);
-        // const userID = {req.body.userId}
-        // const accountNumber = req.body.accountNumber;
-        // const accountType = req.body.accountType;
-        // const accountInstitution = req.body.accountInstitution;
-        // const transactionData = {req.body.transactions};
+        console.log(req.body);
+        const userID = req.body.userId
+        const accountNumber = req.body.accountNumber;
+        const accountType = req.body.accountType;
+        const accountInstitution = req.body.accountInstitution;
+        const transactionData = req.body.accountTransactions;
 
+        console.log("===============================TRANSACTION")
+        console.log(typeof transactionData);
+        console.log(transactionData);
+
+        // var data = fs.readFileSync(transactionData);
+        // console.log("=====================data");
+        // console.log(data);
+
+        // var options = {
+        //   delimiter : ','
+        // };
+
+        // console.log("=====================trans");
+        // let trans = csvjson.toObject(data, options);
+
+        //This is the working one
         db.Account.create({
             number: accountNumber,
             institution: accountInstitution,
@@ -88,31 +103,28 @@ const db = require("../../models");
             console.log(dbAccount);
         })
 
+        //This is the work in progress
+        // db.Account.create({
+        //     number: accountNumber,
+        //     institution: accountInstitution,
+        //     type: accountType,
+        //     UserId: userID
+        // }).then(function(dbAccount) {
+        //     db.Transaction.bulkCreate([transactionData]
+ 
+        // })
+
     });
 
-        // db.Account.create({
-        //     number: ,
-        //     institution: ,
-        //     type:  ,
-        //     UserId: 
-        // }).then(function(dbAccount) {
-          
-        //   console.log(dbAccount);
-
-        //   db.Transaction.bulkCreate({
-        //     date: ,
-        //     month: ,
-        //     year: ,
-        //     description: ,
-        //     amount: ,
-        //     category: ,
-        //     AccountId: dbAccount.dataValues.id,
-        //   }).then(function(result) {
-        //     response.json(result);
-        //   })
-        // });
-
-    // });
+    router.delete("/:id/account/:accountid", function(req, res) {
+        const currentAccount = req.params.accountid
+        
+        db.Account.destroy({
+            where: { id: currentAccount }
+        }).then(function(dbAccount) {
+            console.log(dbAccount);
+        })
+    });
     // ===================================================================
     // HOME PAGE (with login links) ======================================
     // ===================================================================

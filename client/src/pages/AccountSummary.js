@@ -6,48 +6,61 @@ import Portfolio from "../components/Portfolio";
 import helpers from '../utils/helpers.js';
 
 class AccountSummary extends Component {
+  
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+            userId:     '',
+            accounts: '', 
+            age:      '', 
+            agi:      '', 
+            name:     ''
+    }
+  }
 
+  componentDidMount() {
+  var userId = sessionStorage.getItem('userId');
+
+  this.setState({
+    userId: userId
+  })
+
+ 	this.getAllAccounts(userId);
+  }
+  
   getAllAccounts = user => {
     helpers.getAccounts(user).then(response => {
-    		console.log(response.data)
-          var json = JSON.stringify(response.data);
-          console.log(json)
+        // console.log(response.data)
+        //   var json = JSON.stringify(response.data);
+        //   console.log(json)
+          
           this.setState({
-          	user:     response.data.id,
-          	accounts: response.data.Accounts, 
-          	age:      response.data.age, 
-          	agi:      response.data.agi, 
-          	name:     response.data.name
+            accounts: response.data.Accounts, 
+            age:      response.data.age, 
+            agi:      response.data.agi, 
+            name:     response.data.firstname
           })
           console.log(this.state)
         });
   }
 
-  componentDidMount() {
-
-  console.log(sessionStorage.getItem('userId'));
-  var user = this.props.match.params.id;
- 	console.log(user);
- 	this.getAllAccounts(user);
-  }
-
-  state = {
-
-  };
-
 
 render() {
     return (
       <div>
-		<Navbar/>
-		<Portfolio
-      user={this.state.user} 
-      name={this.state.name} 
+		<Navbar
+      name={this.state.name}
+      user={this.state.userId}
+    />
+    <Portfolio
       age={this.state.age}  
       agi={this.state.agi}
     />
-    <AddAccount />
-		<Accounts user={this.state.user} accounts={this.state.accounts}/>
+    <AddAccount
+      user={this.state.userId}
+    />
+		<Accounts user={this.state.userId} accounts={this.state.accounts}/>
       </div>
     );
   }

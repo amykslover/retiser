@@ -2,44 +2,54 @@ import React, { Component } from "react";
 import Navbar from "../components/Navbar";
 import Detail from "../components/Detail";
 import helpers from '../utils/helpers.js';
+import Accounts from "../components/Accounts";
 
 class AccountDetail extends Component {
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+
+    }
+  }
+
   getAllTransactions = (user, account) => {
 
     helpers.getTransactions(user, account).then(response => {
 
-          console.log(`Transactions Retrieved: ${JSON.stringify(response.data)}`);
+          // console.log(`Transactions Retrieved: ${JSON.stringify(response.data)}`);
           this.setState({transactions: response.data})
           console.log(this.state)
         });
   }
 
   componentDidMount() {
-  console.log('================================');  
-  const user = this.props.match.params.id;
-  console.log(user);
+
+  var userId = sessionStorage.getItem('userId');
+  
+  this.setState({
+    userId: userId
+  })
+
   const account = this.props.match.params.accountid;
  	console.log(account);
- 	this.getAllTransactions(user, account);
+ 	this.getAllTransactions(userId, account);
   }
-
-  state = {
-  	age: 35,
-  	agi: 150000,
-  	name: 'Amy'
-  };
-
-
 
 
 render() {
     return (
       <div>
-		<Navbar age={this.state.age}  agi={this.state.agi}/>
-		<Detail transactions={this.state.transactions}/>
+    <Navbar
+      name={this.state.name}
+      user={this.state.userId}
+    />
+    <Detail transactions={this.state.transactions}/>
       </div>
     );
   }
 }
 
 export default AccountDetail;
+
+    // <Accounts user={this.state.userId} accounts={this.state.accounts}/>
