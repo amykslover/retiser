@@ -10,41 +10,54 @@ class AccountSummary extends Component {
   constructor(props) {
     super(props);
   
+    this.getAllAccounts     = this.getAllAccounts.bind(this)
+    this.getAllTransactions = this.getAllTransactions.bind(this)
+
     this.state = {
-            userId:     '',
-            accounts: '', 
-            age:      '', 
-            agi:      '', 
-            name:     ''
+            userId:       '',
+            accounts:     '', 
+            age:          '', 
+            agi:          '', 
+            name:         '',
+            transactions: ''
     }
   }
 
+
+
   componentDidMount() {
-  var userId = sessionStorage.getItem('userId');
+    var userId = sessionStorage.getItem('userId');
 
-  this.setState({
-    userId: userId
-  })
+    this.setState({
+      userId: userId
+    })
 
- 	this.getAllAccounts(userId);
+    this.getAllAccounts(userId);
+    this.getAllTransactions(userId);
   }
   
   getAllAccounts = user => {
     helpers.getAccounts(user).then(response => {
-        // console.log(response.data)
-        //   var json = JSON.stringify(response.data);
-        //   console.log(json)
-          
-          this.setState({
-            accounts: response.data.Accounts, 
-            age:      response.data.age, 
-            agi:      response.data.agi, 
-            name:     response.data.firstname
-          })
-          console.log(this.state)
-        });
+
+      this.setState({
+        accounts: response.data.Accounts, 
+        age:      response.data.age, 
+        agi:      response.data.agi, 
+        name:     response.data.firstname
+      })
+
+    });
   }
 
+  getAllTransactions = user => {
+    helpers.getUserTransactions(user).then(response => {
+
+      this.setState({
+        transactions: response.data
+      })
+
+    });
+  }
 
 render() {
     return (
@@ -53,12 +66,9 @@ render() {
       name={this.state.name}
       user={this.state.userId}
     />
-    <Portfolio
-      age={this.state.age}  
-      agi={this.state.agi}
-    />
     <AddAccount
       user={this.state.userId}
+      getAllAccounts={this.getAllAccounts}
     />
 		<Accounts user={this.state.userId} accounts={this.state.accounts}/>
       </div>

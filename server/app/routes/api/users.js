@@ -9,27 +9,24 @@ const fs = require('fs');
     //This should take data fromt the axios helper and create a user in the db
 
     router.post("/login", function(req, res) {
-        console.log(`Create for body: ${JSON.stringify(req.body)}`);
-        db.User
-          .findOrCreate({ where: {email: req.body.email},
-                            defaults: {
-                                firstname: req.body.firstName, 
-                                lastname: req.body.lastName, 
-                                google_id: req.body.google_id} 
-                            })
-          .spread((user, created) => {
-                console.log(user.get({plain: true}));
-                console.log(created);
-                res.json(user);
-          })
-          .catch(error => res.status(422).json(error));
+
+        db.User.findOrCreate({ 
+            where: {email: req.body.email},
+            defaults: {
+                        firstname: req.body.firstName, 
+                        lastname: req.body.lastName, 
+                        google_id: req.body.google_id
+                    } 
+        }).spread((user, created) => {
+            console.log(user.get({plain: true}));
+            console.log(created);
+            res.json(user);
+        }).catch(error => res.status(422).json(error));
     });
-    //This should retrieve all the data from the user that is logged in
+
+    //Get all data from user on login
     router.get("/:id", function(req, res) {
         const currentUser = req.params.id
-        console.log('Current User');
-        console.log(currentUser);
-
 
         db.User.findOne({
             where : 
@@ -39,81 +36,93 @@ const fs = require('fs');
                 model  : db.Account,
             include: [
             {
-              model  : db.Transaction
+                model  : db.Transaction
+            }
+          ]}]
+        }).then(function(data) {
+          res.json(data);
+        });
+    });
+
+    //Get all transactions from user on login
+    router.get("/:id/transactions", function(req, res) {
+        const currentUser = req.params.id
+
+        db.Account.findAll({
+            where : 
+            { UserId : currentUser},
+            include: [
+            {
+                model  : db.Transaction
             }
           ]
-        }
-      ]
-    }).then(function(data) {
-          res.json(data);
-      });
+        }).then(function(data) {
+            let transactions = []
+            for (var i = 0; i < data.length; i++) {
+            
+                accountTx = data[i].dataValues.Transactions
 
-});
-
-    //Get transasctions for a user account
-    router.get("/:id/account/:accountid", function(req, res) {
-
-        const currentAccount = req.params.accountid
-        
-        db.Transaction.findAll(
-        {
-            include: [ 
-                { 
-                    model: db.Account,
-                    where: { id: currentAccount }
-                }
-            ]
-        })
-        .then(function(transactions) {
-          res.json(transactions);
+                for (var i = 0; i < accountTx.length; i++) {
+                    accountTxDetails = accountTx[i].dataValues;
+                    transactions.push(accountTxDetails)
+                }            
+            }
+            res.json(transactions);
         });
     });
 
     //Create a new account for a user
     router.post("/:id/account", function(req, res) {
-        console.log(req.body);
+
         const userID = req.body.userId
         const accountNumber = req.body.accountNumber;
         const accountType = req.body.accountType;
         const accountInstitution = req.body.accountInstitution;
         const transactionData = req.body.accountTransactions;
 
-        console.log("===============================TRANSACTION")
-        console.log(typeof transactionData);
-        console.log(transactionData);
+        let transactionAccount;
 
-        // var data = fs.readFileSync(transactionData);
-        // console.log("=====================data");
-        // console.log(data);
-
-        // var options = {
-        //   delimiter : ','
-        // };
-
-        // console.log("=====================trans");
-        // let trans = csvjson.toObject(data, options);
-
-        //This is the working one
         db.Account.create({
             number: accountNumber,
             institution: accountInstitution,
             type: accountType,
             UserId: userID
         }).then(function(dbAccount) {
-            console.log(dbAccount);
+            transactionAccount = dbAccount.dataValues.id;
+
+            for (var i = 1; i < transactionData.length; i++) {
+
+                var date         = transactionData[i][0];
+                var amount      = transactionData[i][1]
+                var description  = transactionData[i][2];
+                var category     = transactionData[i][3];
+                var month        = parseInt(transactionData[i][4]);
+                var year         = parseInt(transactionData[i][5]);
+
+                // console.log('======================================= Transaction' + i)
+                // console.log('DATE: ' + date);
+                // console.log('AMOUNT: ' + amount);
+                // console.log('DESCRIPTION: ' + description);
+                // console.log('CATEGORY: ' + category);
+                // console.log('MONTH: ' + month);
+                // console.log('YEAR: ' + year);
+                // console.log(transactionAccount)
+
+
+                db.Transaction.create({
+                    date: date,
+                    month: month,
+                    year: year,
+                    description: description,
+                    amount: amount,
+                    category: category,
+                    AccountId: transactionAccount
+                }).then(function(dbTransaction) {
+                    newTransaction = dbTransaction.dataValues.id
+                    console.log('Transaction Created: ' + newTransaction)
+                })
+            }
         })
-
-        //This is the work in progress
-        // db.Account.create({
-        //     number: accountNumber,
-        //     institution: accountInstitution,
-        //     type: accountType,
-        //     UserId: userID
-        // }).then(function(dbAccount) {
-        //     db.Transaction.bulkCreate([transactionData]
- 
-        // })
-
     });
 
     router.delete("/:id/account/:accountid", function(req, res) {

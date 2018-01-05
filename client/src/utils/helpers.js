@@ -29,7 +29,6 @@ const helpers = {
         return results;
       })
   },
-
   getAccount: function(accountId) {
     return axios.get(`/api/account/${accountId}`)
 
@@ -39,19 +38,29 @@ const helpers = {
       })
   },
 
-  getTransactions: function(userId, accountId) {
+  getUserTransactions: function(userId) {
 
-    return axios.get(`/api/users/${userId}/account/${accountId}`)
+    return axios.get(`/api/users/${userId}/transactions`)
+      .then(function(results) {
+        console.log("axios results", results);
+        return results;
+      })
+  },
+
+  getTransactions: function(accountId) {
+
+    return axios.get(`/api/account/${accountId}`)
 
       .then(function(results) {
         console.log("axios results", results);
         return results;
       })
   },
+
   //This request will overwrite the data in the existing account
   deleteAccount: function(accountId) {
 
-    return axios.delete("/api/users/account/" + accountId)
+    return axios.delete("/api/account/" + accountId)
       .then(function(results) {
         console.log("axios results", results);
         return results;
@@ -60,7 +69,6 @@ const helpers = {
 
   addAccount: function(userId, accountNumber, accountType, accountInstitution, accountTransactions) {
 
-    // return axios.post(`/api/users/${userId}/account`)
     return axios({
       method: 'post',
       url: `/api/users/${userId}/account`,

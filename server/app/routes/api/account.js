@@ -1,20 +1,18 @@
 const router = require("express").Router();
 const db = require("../../models");
 
-
-
-//delete account
-
+    //Delete account when user clicks on trash
     router.delete("/:accountid", function(req, res) {
-        const currentAccount = req.params.accountid
-        
+
+        const currentAccount = req.params.accountid;
+        console.log(currentAccount)
+
         db.Account.destroy({
             where: { id: currentAccount }
         }).then(function(dbAccount) {
             console.log(dbAccount);
         })
     });
-
 
     //Get transasctions for a user account
     router.get("/:accountid", function(req, res) {
@@ -34,3 +32,5 @@ const db = require("../../models");
           res.json(transactions);
         });
     });
+
+module.exports = router;

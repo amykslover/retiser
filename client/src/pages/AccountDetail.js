@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import Navbar from "../components/Navbar";
-import Detail from "../components/Detail";
+import React, { Component } from 'react';
+import Navbar from '../components/Navbar';
+import Detail from '../components/Detail';
 import helpers from '../utils/helpers.js';
-import Accounts from "../components/Accounts";
+import Accounts from '../components/Accounts';
 
 class AccountDetail extends Component {
   constructor(props) {
@@ -13,11 +13,9 @@ class AccountDetail extends Component {
     }
   }
 
-  getAllTransactions = (user, account) => {
+  getAllTransactions = (account) => {
 
-    helpers.getTransactions(user, account).then(response => {
-
-          // console.log(`Transactions Retrieved: ${JSON.stringify(response.data)}`);
+    helpers.getTransactions(account).then(response => {
           this.setState({transactions: response.data})
           console.log(this.state)
         });
@@ -33,7 +31,7 @@ class AccountDetail extends Component {
 
   const account = this.props.match.params.accountid;
  	console.log(account);
- 	this.getAllTransactions(userId, account);
+ 	this.getAllTransactions(account);
   }
 
 

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
 import "./Detail.css";
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import NumberFormat from 'react-number-format';
 
 function priceFormatter(cell, row) {
-  return `<i class='glyphicon glyphicon-usd'></i> ${cell}`;
+  return <NumberFormat value={cell} displayType={'text'} decimalScale={2} fixedDecimalScale={true} thousandSeparator={true} prefix={'$'} renderText={value => <div>{value}</div>} />
 }
 
 let order = 'desc';

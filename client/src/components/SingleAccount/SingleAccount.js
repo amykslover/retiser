@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Amount from "../Amount"
 import "./SingleAccount.css";
 import helpers from '../../utils/helpers.js';
+import ActionHome from 'material-ui/svg-icons/action/home';
+import IconButton from 'material-ui/IconButton';
 
 
 class SingleAccount extends Component {
@@ -15,20 +17,21 @@ class SingleAccount extends Component {
 
 
 	removeAccount = accountId => {
+
 		helpers.deleteAccount(accountId).then(response => {
 			console.log(response);
+			console.log('Deleted:' + accountId)
 		});
 	}
+
 
 	render() {
 		const { user, account } = this.props
 		var goal = 18000;
 
-
 		const accountinfo = (
 			<div>
-				<i className="fa fa-cog pull-right"></i>
-
+				<i className="fa fa-trash-o pull-right"></i>
 				<Link to={user + "/account/" + account.id}>
 				  <p>{account.type}  {account.number}</p>
 				  <h2>{account.institution}</h2>
@@ -36,6 +39,7 @@ class SingleAccount extends Component {
 			</div>
 		);
 
+		console.log(account.Transactions)
 
 		return (
 			<li>
@@ -45,22 +49,22 @@ class SingleAccount extends Component {
 				<Amount
 				label="Total Balance"
 				value={account.Transactions}
+				type="primary"
 				/>
 				<Amount
-				label="Employee Contribution YTD"
+				label="Contributed YTD"
 				value={this.transactionFilter(account.Transactions, 2017,'Contribution')}
-				/>
-				<Amount 
-				label="Employer Contribution YTD"
-				value={this.transactionFilter(account.Transactions, 2017,'Employer Contribution')}
+				type="success"
 				/>
 				<Amount
 				label="Dividend YTD"
 				value={this.transactionFilter(account.Transactions, 2017,'Dividend')}
+				type="info"
 				/>
 				<Amount
 				label="Fees YTD"
 				value={this.transactionFilter(account.Transactions, 2017,'Fee')}
+				type="danger"
 				/>
 				</div>
 

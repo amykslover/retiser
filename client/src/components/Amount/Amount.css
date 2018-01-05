@@ -4,7 +4,13 @@ h1 {
 }
 
 #amountbox {
-	width: 15%;
-	min-width: 80px;
+	width: 16%;
+	min-width: 100px;
 	margin: 0 5px;
+}
+
+.amountLabel {
+	font-size: 16px;
+	margin-bottom: 5px;
+	word-wrap: break-word;
 }

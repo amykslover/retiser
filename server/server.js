@@ -53,11 +53,6 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 //Models
 var models = require("./app/models");
 
-
-//Routes
-// var authRoute = require('./app/routes/api/users.js')(app,passport);
-
-
 //load passport strategies
 // require('./config/passport/passport.js')(passport, models.User);
 
@@ -126,20 +121,14 @@ models.sequelize.sync({ force: true }).then(function() {
     },
     {
       number: "123456789",
-      institution: "Vanguard",
-      type: "401k",
+      institution: "Fidelity",
+      type: "403b",
       UserId: "3"
     },
     {
       number: "987654321",
-      institution: "Pensys",
-      type: "401k",
-      UserId: "3"
-    },
-    {
-      number: "77777777",
-      institution: "Fidelity",
-      type: "IRA",
+      institution: "Vanguard",
+      type: "rIRA",
       UserId: "3"
     }
   ])
@@ -147,21 +136,21 @@ models.sequelize.sync({ force: true }).then(function() {
 
   models.Transaction.bulkCreate([
     {
-      date: "01/10/2017",
+      date: "12/20/2016",
       month: 1,
       year: 2016,
-      description: "SAFE HARBOR MATCH",
+      description: "PRE TAX CONTRIBUTION",
       amount: '1500.96',
-      category: "Employer Contribution",
+      category: "Contribution",
       AccountId: "5"
     },
     {
       date: "01/13/2017",
       month: 1,
       year: 2017,
-      description: "SAFE HARBOR MATCH",
-      amount: 250.00,
-      category: "Employer Contribution",
+      description: "DFA",
+      amount: 119.54,
+      category: "Dividend",
       AccountId: "5"
     },
     {
@@ -177,18 +166,9 @@ models.sequelize.sync({ force: true }).then(function() {
       date: "01/30/2017",
       month: 1,
       year: 2017,
-      description: "SAFE HARBOR MATCH",
-      amount: 310.00,
-      category: "Employer Contribution",
-      AccountId: "5"
-    },
-    {
-      date: "01/30/2017",
-      month: 1,
-      year: 2017,
-      description: "PRE TAX CONTRIBUTION",
-      amount: 620.00,
-      category: "Contribution",
+      description: "RECORDKEEPING FEE",
+      amount: -20.00,
+      category: "Fee",
       AccountId: "5"
     },
     {
@@ -213,27 +193,9 @@ models.sequelize.sync({ force: true }).then(function() {
       date: "02/15/2017",
       month: 2,
       year: 2017,
-      description: "SAFE HARBOR MATCH",
-      amount: 250.00,
-      category: "Employer Contribution",
-      AccountId: "5"
-    },
-    {
-      date: "02/15/2017",
-      month: 2,
-      year: 2017,
       description: "PRE TAX CONTRIBUTION",
       amount: 500.00,
       category: "Contribution",
-      AccountId: "5"
-    },
-    {
-      date: "02/27/2017",
-      month: 2,
-      year: 2017,
-      description: "SAFE HARBOR MATCH",
-      amount: 250.00,
-      category: "Employer Contribution",
       AccountId: "5"
     },
     {
@@ -244,6 +206,15 @@ models.sequelize.sync({ force: true }).then(function() {
       amount: 500.00,
       category: "Contribution",
       AccountId: "5"
+    },
+    {
+      date: "06/30/2011",
+      month: 6,
+      year: 2011,
+      description: "PRE TAX CONTRIBUTION",
+      amount: 1921.00,
+      category: "Contribution",
+      AccountId: "4"
     }
   ])
 

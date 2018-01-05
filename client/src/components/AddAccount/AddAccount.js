@@ -18,7 +18,7 @@ class AddAccount extends Component {
 		super(props);
 
 		this.state = {
-			disabled: true,
+			open: false,
 			files: [],
 			userId: '',
 			accountNumber: '',
@@ -30,48 +30,44 @@ class AddAccount extends Component {
 
 	componentDidMount() {
 		var userId = sessionStorage.getItem('userId');
+
 		this.setState({
 			userId: userId
 		})
 	}
 
-	addNewAccount = (userId, accountNumber, accountType, accountInstitution) => {
+	addNewAccount = (userId, accountNumber, accountType, accountInstitution, accountTransactions) => {
 
-		helpers.addAccount(userId, accountNumber, accountType, accountInstitution).then(response => {
+		helpers.addAccount(userId, accountNumber, accountType, accountInstitution, accountTransactions).then(response => {
 			console.log(`Account Added: ${JSON.stringify(response.data)}`);
 		});
+
+		this.props.getAllAccounts(userId)
+		// this.props.getAllTransactions(userId)
 	}
-
-	
-
 
 
 	onDrop = (e) => {
-
 	    const reader = new FileReader();
-
 	    reader.onload = () => {
 
 	        csv.parse(reader.result, (err, data) => {
-	            console.log(data);
 
 				this.setState({
 					fileInfo: e[0],
 					accountTransactions: data,
+					open: false
 				})
 
-				console.log(this.state);
+			    this.addNewAccount(this.state.userId, this.state.accountNumber, this.state.accountType, this.state.accountInstitution, this.state.accountTransactions);
 	        });
 	    };
-
 	    reader.readAsBinaryString(e[0]);
-
 	}
 
 
-	
 	render() {
-
+	
 	return(
 
     <div className="addAccountCollapse">
@@ -86,11 +82,12 @@ class AddAccount extends Component {
 
 		  <Form horizontal>
 		    <FormGroup controlId="formAccountInstitution">
-		      <Col componentClass={ControlLabel} sm={2}>
+		      <Col className="inputLabel" componentClass={ControlLabel} sm={2}>
 		        Institution
 		      </Col>
 		      <Col sm={10}>
 		        <FormControl 
+		        	className="formInput"
 		        	type="text" 
 		        	name="instution" 
 		        	placeholder="Financial Institution" 
@@ -101,11 +98,12 @@ class AddAccount extends Component {
 		    </FormGroup>
 
 		    <FormGroup controlId="formAccountNumber">
-		      <Col componentClass={ControlLabel} sm={2}>
+		      <Col className="inputLabel" componentClass={ControlLabel} sm={2}>
 		        Number
 		      </Col>
 		      <Col sm={10}>
-		        <FormControl 
+		        <FormControl
+		        className="formInput"
 		        type="text" 
 		        name="number" 
 		        placeholder="Account Number" 
@@ -117,12 +115,13 @@ class AddAccount extends Component {
 		    </FormGroup>
 
 		    <FormGroup controlId="formAccountType">
-		      <Col componentClass={ControlLabel} sm={2}>
+		      <Col className="inputLabel" componentClass={ControlLabel} sm={2}>
 		        Type
 		      </Col>
 		      <Col sm={10}>
 
-		        <select 
+		        <select
+		        className="formInput"
 		        onChange={event => this.setState({ accountType: event.target.value })}
 		        name="accountType">
 		          <option value="none">Select Type</option>
@@ -138,26 +137,15 @@ class AddAccount extends Component {
 			
 		    <FormGroup>
 		      <Col smOffset={2} sm={10}>
-				
-				<section>
-			        <aside>
-			          <button type="button" onClick={() => this.setState({ disabled: !this.state.disabled })}>Toggle disabled</button>
-			        </aside>
-			        <div className="dropzone">
-			          <Dropzone onDrop={this.onDrop.bind(this)} disabled={this.state.disabled}>
-			            <p>Try dropping some files here, or click to select files to upload.</p>
+				<section className="dropzoneSection">
+			        <div>
+			          <Dropzone multiple={false} onDrop={this.onDrop.bind(this)}>
+			            <div className="dropzoneDiv">
+			        		<p>drop retirement account file here</p>
+			            </div>
 			          </Dropzone>
 			        </div>
-			        <aside>
-			          <h2>Dropped files</h2>
-			          <ul>
-			            {
-			              this.state.files.map(f => <li>{f.name} - {f.size} bytes</li>)
-			            }
-			          </ul>
-			        </aside>
 			    </section>
-
 		      </Col>
 		    </FormGroup>
 		  </Form>

@@ -13,3 +13,30 @@
 label {
 	font-size: 16px;
 }
+.formInput {
+	height: 35px !important;
+	font-size: 14px;
+}
+
+.inputLabel {
+    padding-top: 5px !important;
+}
+.dropzone {
+	border-width: 2px; 
+	border-color: rgb(102, 102, 102); 
+	border-style: dashed; 
+	border-radius: 5px;
+	width: 100%;
+	height: 70px;
+}
+
+.dropzoneDiv {
+	text-align: center;
+	padding: 20px;
+	font-variant: small-caps;
+	font-size: 22px;
+}
+.dropzoneContainer {
+	width: 100%;
+
+}
